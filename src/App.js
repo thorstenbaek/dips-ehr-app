@@ -1,26 +1,73 @@
 import React from 'react';
-import logo from './logo.svg';
+import {BrowserRouter as Router, Route } from 'react-router-dom';
+import { v4 as uuidv4 } from 'uuid';
+import Axios from 'axios';
+import About from './components/pages/About';
+import Header from './components/layout/Header';
+import Viewer from './components/Viewer';
+import PatientList from './components/PatientList';
+
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+class App extends React.Component {
+
+  state = { 
+    patients: [],
+    selectedPatient: null
+  }
+
+  componentDidMount() {
+    Axios.get("http://localhost:8080/Patient")
+    .then(res => this.setState({ patients: res.data }));
+  }
+
+  // set current selected patient
+  selectPatient = (id) => {
+    
+    
+    this.setState({      
+      selectedPatient: this.state.patients.filter(patient => patient.id === id)[0],          
+      patients: this.state.patients.map(patient => {
+        patient.isSelected = patient.id === id;              
+        
+        return patient;
+      })
+    });
+  }
+
+  addPatient = (patient) => {
+    const newPatient = {
+      id: uuidv4(),
+      firstName: patient.firstName,
+      lastName: patient.lastName,
+      birthDate: patient.birthDate
+    }
+
+    this.setState(
+      {patients: [...this.state.patients, newPatient]}
+    );
+  }
+
+  render() {    
+    return (    
+      <Router>
+        <div className="App">
+          <div className="container" id="container" style={{overflow:'hidden'}}>
+            <Header/>
+            <Route exact path="/" render={props => (
+              <React.Fragment>
+                <PatientList patients={this.state.patients} select={this.selectPatient}/>    
+                <Viewer patient={this.state.selectedPatient}/>
+              </React.Fragment>
+            )} />
+            <Route path="/about" component={About}/>            
+          </div>
+        </div>
+      </Router>  
+    );
+  } 
 }
 
 export default App;
+ 
