@@ -1,0 +1,8 @@
+version: '3.3'
+services:
+  dips-ehr-app:
+    build:
+      context: .
+    image: docker.artifacts.dips.local/dips/dips-ehr-app:latest
+    ports:
+     - "4000:80"

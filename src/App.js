@@ -12,14 +12,29 @@ import './App.css';
 
 class App extends React.Component {
 
-  state = { 
-    patients: [],
-    selectedPatient: null
+  constructor(props) {
+    super(props);
+   
+    const FHIR_SERVICE_URI = window.FHIR_SERVICE_URI;
+
+    console.log("FHIR service url :" + FHIR_SERVICE_URI);
+
+    this.state = { 
+      fhirServiceUrl: FHIR_SERVICE_URI,
+      patients: [],
+      selectedPatient: null,    
+    };    
+  }   
+
+
+  refreshPatients()
+  {
+    Axios.get(this.state.fhirServiceUrl + "/Patient")
+    .then(res => this.setState({ patients: res.data }));
   }
 
   componentDidMount() {
-    Axios.get("http://localhost:8080/Patient")
-    .then(res => this.setState({ patients: res.data }));
+    this.refreshPatients();
   }
 
   // set current selected patient
@@ -53,15 +68,17 @@ class App extends React.Component {
     return (    
       <Router>
         <div className="App">
-          <div className="container" id="container" style={{overflow:'hidden'}}>
-            <Header/>
-            <Route exact path="/" render={props => (
+          <div className="container" id="container" style={{overflow:'hidden'}}>            
+            <Header/>                        
+            <Route exact path="/" render={() => (
               <React.Fragment>
                 <PatientList patients={this.state.patients} select={this.selectPatient}/>    
                 <Viewer patient={this.state.selectedPatient}/>
               </React.Fragment>
             )} />
-            <Route path="/about" component={About}/>            
+            <Route path="/about" render={() => (
+              <About fhirServiceUrl={this.state.fhirServiceUrl}/>
+            )}/>            
           </div>
         </div>
       </Router>  
