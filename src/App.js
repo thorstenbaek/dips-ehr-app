@@ -73,7 +73,7 @@ class App extends React.Component {
             <Route exact path="/" render={() => (
               <React.Fragment>
                 <PatientList patients={this.state.patients} select={this.selectPatient}/>    
-                <Viewer patient={this.state.selectedPatient}/>
+                <Viewer patient={this.state.selectedPatient} fhirServiceUrl={this.state.fhirServiceUrl}/>
               </React.Fragment>
             )} />
             <Route path="/about" render={() => (
