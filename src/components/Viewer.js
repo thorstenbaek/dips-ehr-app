@@ -21,7 +21,7 @@ class Viewer extends React.Component {
         var frameWidth = container?.clientWidth - patientList?.clientWidth - 10;
         var frameHeight = 1024;
 
-        let url = `http://localhost:9000/launch.html?fhirServiceUrl=${fhirServiceUrl}&redirect_uri=http://localhost:9000/index.html&patientId=${patientId}`;    
+        let url = `https://growth-chart-app.azurewebsites.net/launch.html?fhirServiceUrl=${fhirServiceUrl}&redirect_uri=https://growth-chart-app.azurewebsites.net/index.html&patientId=${patientId}`;    
 
         return (
             <div style={{float: 'left'}} 
