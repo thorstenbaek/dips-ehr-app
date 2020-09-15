@@ -23,9 +23,10 @@ class App extends React.Component {
       fhirServiceUrl: FHIR_SERVICE_URI,
       patients: [],
       selectedPatient: null,    
+      smartApps: [ {label: "Growth Chart", value: "https://growth-chart-app.azurewebsites.net"}, {label: "DIPS Demo", value: "https://dips-fhir-app.azurewebsites.net"}, {label: "NAV Pleiepenger", value: "https://nav-fhir-app.azurewebsites.net"}],
+      selectedSmartApp: {label: "Growth Chart", value: "https://growth-chart-app.azurewebsites.net"}
     };    
   }   
-
 
   refreshPatients()
   {
@@ -38,9 +39,7 @@ class App extends React.Component {
   }
 
   // set current selected patient
-  selectPatient = (id) => {
-    
-    
+  selectPatient = (id) => {        
     this.setState({      
       selectedPatient: this.state.patients.filter(patient => patient.id === id)[0],          
       patients: this.state.patients.map(patient => {
@@ -51,6 +50,13 @@ class App extends React.Component {
     });
   }
 
+  smartAppChange = (event) => {
+    this.setState({
+      selectedSmartApp: this.state.smartApps.filter(app => app.value === event.target.value)[0]
+      }
+    )
+  }
+
   addPatient = (patient) => {
     const newPatient = {
       id: uuidv4(),
@@ -59,8 +65,8 @@ class App extends React.Component {
       birthDate: patient.birthDate
     }
 
-    this.setState(
-      {patients: [...this.state.patients, newPatient]}
+    this.setState({
+      patients: [...this.state.patients, newPatient]}
     );
   }
 
@@ -73,11 +79,14 @@ class App extends React.Component {
             <Route exact path="/" render={() => (
               <React.Fragment>
                 <PatientList patients={this.state.patients} select={this.selectPatient}/>    
-                <Viewer patient={this.state.selectedPatient} fhirServiceUrl={this.state.fhirServiceUrl}/>
+                <Viewer smartApp={this.state.selectedSmartApp} fhirServiceUrl={this.state.fhirServiceUrl} patient={this.state.selectedPatient} onChange={this.smartAppChange}
+                        options={this.state.smartApps} 
+                        value={this.state.selectedSmartApp.value}/>
               </React.Fragment>
             )} />
             <Route path="/about" render={() => (
-              <About fhirServiceUrl={this.state.fhirServiceUrl}/>
+              <About fhirServiceUrl={this.state.fhirServiceUrl} 
+                />
             )}/>            
           </div>
         </div>
