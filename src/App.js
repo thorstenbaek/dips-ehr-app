@@ -14,23 +14,29 @@ class App extends React.Component {
 
   constructor(props) {
     super(props);
-   
-    const FHIR_SERVICE_URI = window.FHIR_SERVICE_URI;
 
-    console.log("FHIR service url :" + FHIR_SERVICE_URI);
+    const FHIR_SERVICE_URI = window.FHIR_SERVICE_URI;
 
     this.state = { 
       fhirServiceUrl: FHIR_SERVICE_URI,
       patients: [],
       selectedPatient: null,    
+      smartApps: [
+        {label: "Growth Chart", value: "http://growth-chart-app.northeurope.cloudapp.azure.com"}, 
+        {label: "DIPS Demo", value: "https://dips-smartonfhir-app.northeurope.cloudapp.azure.com"}, 
+        {label: "NAV Pleiepenger", value: "https://nav-smartonfhir-app.azurewebsites.net"}],
+      selectedSmartAppIndex: 1,
     };    
   }   
 
-
   refreshPatients()
   {
+    console.log("Refresh patients");
     Axios.get(this.state.fhirServiceUrl + "/Patient")
-    .then(res => this.setState({ patients: res.data }));
+    .then(res => {
+      console.log(res.data.entry);
+      this.setState({ patients: res.data.entry.map(p => p.resource) });
+    });
   }
 
   componentDidMount() {
@@ -38,9 +44,7 @@ class App extends React.Component {
   }
 
   // set current selected patient
-  selectPatient = (id) => {
-    
-    
+  selectPatient = (id) => {            
     this.setState({      
       selectedPatient: this.state.patients.filter(patient => patient.id === id)[0],          
       patients: this.state.patients.map(patient => {
@@ -51,6 +55,13 @@ class App extends React.Component {
     });
   }
 
+  smartAppChange = (event) => {
+    this.setState({
+      selectedSmartAppIndex: this.state.smartApps.findIndex(item => item.value === event.target.value)
+      }
+    )
+  }
+
   addPatient = (patient) => {
     const newPatient = {
       id: uuidv4(),
@@ -59,12 +70,16 @@ class App extends React.Component {
       birthDate: patient.birthDate
     }
 
-    this.setState(
-      {patients: [...this.state.patients, newPatient]}
+    this.setState({
+      patients: [...this.state.patients, newPatient]}
     );
   }
 
   render() {    
+
+    var selectedSmartApp = this.state.smartApps[this.state.selectedSmartAppIndex].value;
+    console.log(selectedSmartApp);
+
     return (    
       <Router>
         <div className="App">
@@ -72,12 +87,16 @@ class App extends React.Component {
             <Header/>                        
             <Route exact path="/" render={() => (
               <React.Fragment>
-                <PatientList patients={this.state.patients} select={this.selectPatient}/>    
-                <Viewer patient={this.state.selectedPatient} fhirServiceUrl={this.state.fhirServiceUrl}/>
+                <PatientList patients={this.state.patients} select={this.selectPatient}/>                    
+
+                <Viewer smartApp={selectedSmartApp} fhirServiceUrl={this.state.fhirServiceUrl} patient={this.state.selectedPatient} onChange={this.smartAppChange}
+                        options={this.state.smartApps} 
+                        index={this.state.selectedSmartAppIndex}/>
               </React.Fragment>
             )} />
             <Route path="/about" render={() => (
-              <About fhirServiceUrl={this.state.fhirServiceUrl}/>
+              <About fhirServiceUrl={this.state.fhirServiceUrl} 
+                />
             )}/>            
           </div>
         </div>

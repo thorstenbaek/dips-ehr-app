@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dips-ehr-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dips-ehr-app  
+  template:
+    metadata:
+      labels:
+        app: dips-ehr-app
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      containers:
+      - name: dips-ehr-service
+        image: thorstenbaekcontainerregistry.azurecr.io/dips-ehr-app:latest
+        ports:        
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: dips-ehr-app
+  labels:
+    name: dips-ehr-app
+  annotations:
+    service.beta.kubernetes.io/azure-dns-label-name: dips-ehr-app # => http://dips-ehr-app.northeurope.cloudapp.azure.com/
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+  selector:
+    app: dips-ehr-app

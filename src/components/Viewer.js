@@ -1,36 +1,39 @@
 import React from 'react';
+import SmartAppSelect from './SmartAppSelect';
 
 class Viewer extends React.Component {
-    
-     
-
-    // smartUrl = "https://examples.smarthealthit.org/cardiac-risk-app/launch.html?fhirServiceUrl=http://localhost:8080&redirect_uri=http://examples.smarthealthit.org/cardiac-risk-app/index.html&patientId=";
-    // smartUrl = "https://examples.smarthealthit.org/bp-centiles-app/launch.html?fhirServiceUrl=http://localhost:8080&redirect_uri=http://examples.smarthealthit.org/bp-centiles-app/index.html&patientId=";
-    
-
     render() {
-
-        
         var patientId = this.props.patient?.id;        
-        console.log(patientId);
         var fhirServiceUrl = this.props.fhirServiceUrl;
-        console.log(fhirServiceUrl);
-
+        var smartApp = this.props.smartApp;
+        
         var container = document.getElementById('container');
         var patientList = document.getElementById('patientList');
         var frameWidth = container?.clientWidth - patientList?.clientWidth - 10;
         var frameHeight = 1024;
 
-        let url = `https://growth-chart-app.azurewebsites.net/launch.html?fhirServiceUrl=${fhirServiceUrl}&redirect_uri=https://growth-chart-app.azurewebsites.net/index.html&patientId=${patientId}`;    
+        var hidden = patientId == null || smartApp == null;
+
+        var url = "";
+        if (patientId != null)
+        {
+            url = `${smartApp}/launch.html?fhirServiceUrl=${fhirServiceUrl}&redirect_uri=${smartApp}/index.html&patientId=${patientId}`;    
+        }
+        console.log("URL: " + smartApp);
+
 
         return (
-            <div style={{float: 'left'}} 
-                hidden={patientId == null}>                                                
-            <iframe
-                title="externalView"
-                src={url}
-                style={{ position: 'absolute', width: '1px', minWidth:frameWidth, height: '1px', minHeight:frameHeight}} />
-            </div>
+            <React.Fragment>
+                <div style={{float: 'left'}}>         
+                    <div>
+                        <SmartAppSelect options={this.props.options} index={this.props.index} onChange={this.props.onChange} />
+                    </div>
+                    <iframe hidden={hidden}
+                        title="externalView"
+                        src={url}
+                        style={{ position: 'absolute', width: '1px', minWidth:frameWidth, height: '1px', minHeight:frameHeight}} />
+                    </div>
+            </React.Fragment>
         )
     }
 }
