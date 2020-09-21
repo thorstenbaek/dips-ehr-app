@@ -25,7 +25,7 @@ class App extends React.Component {
         {label: "Growth Chart", value: "http://growth-chart-app.northeurope.cloudapp.azure.com"}, 
         {label: "DIPS Demo", value: "https://dips-smartonfhir-app.northeurope.cloudapp.azure.com"}, 
         {label: "NAV Pleiepenger", value: "https://nav-smartonfhir-app.azurewebsites.net"}],
-      selectedSmartAppIndex: 1,
+      selectedSmartAppIndex: 0, //Growth Chart
     };    
   }   
 
