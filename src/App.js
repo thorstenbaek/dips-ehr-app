@@ -13,10 +13,15 @@ class App extends React.Component {
   constructor(props) {
     super(props);
 
-    const hostname = window.location.hostname + ":" + window.location.port;
+    var hostname = window.location.hostname;
+    if (window.location.port !== "80")
+    {
+      console.log(`Adding port '${window.location.port}' to hostname`);
+      hostname = hostname + ":" + window.location.port;
+    }
     
     this.state = {           
-      configuration: new Configuration(window.CONFIGURATION_SERVICE_URI, hostname),
+      configuration: new Configuration(window.CONFIGURATION_SERVICE_URI, hostname),    
       patients: [],
       selectedPatient: null,    
       smartApps: [
@@ -25,6 +30,8 @@ class App extends React.Component {
         {label: "NAV Pleiepenger", value: "https://nav-smartonfhir-app.azurewebsites.net"}],
       selectedSmartAppIndex: 0, //Growth Chart
     };    
+
+    this.reloadSettings = this.reloadSettings.bind(this);
   }   
 
   async refreshPatients()
@@ -36,13 +43,17 @@ class App extends React.Component {
     this.setState({ patients: res.data.entry.map(p => p.resource) });
   }
 
-  async componentDidMount() {
-    await this.state.configuration.loadConfiguration();
-    
+  async reloadSettings()
+  {
+    this.state.configuration.clearCache();
+
     this.setState({
       fhirServiceUrl: await this.state.configuration.getSetting("FhirServiceUri")      
     });
-    
+  }
+
+  async componentDidMount() {
+    await this.reloadSettings();
     await this.refreshPatients();
   }
 
@@ -98,7 +109,7 @@ class App extends React.Component {
               </React.Fragment>
             )} />
             <Route path="/about" render={() => (
-              <About configuration={this.state.configuration}/>
+              <About configuration={this.state.configuration} reloadSettings={this.reloadSettings}/>
             )}/>            
           </div>
         </div>

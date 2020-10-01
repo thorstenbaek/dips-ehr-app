@@ -22,6 +22,16 @@ class Configuration
         console.log("Loaded configuration");
     }
 
+    clearCache()
+    {
+        this.configuration = null;    
+    }
+
+    getEnvironment()
+    {
+        return this.environment;
+    }
+
     getServiceUrl()
     {
         return this.uri;

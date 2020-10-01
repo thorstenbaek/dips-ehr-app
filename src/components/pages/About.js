@@ -8,29 +8,36 @@ class About extends React.Component {
         this.state = { 
             settings: {},
         }
+
+        this.clearCacheButtonClick = this.clearCacheButtonClick.bind(this);
+    }    
+
+    async reloadSettings() {
+      var settings = await this.props.configuration.getSettings();
+        this.setState(
+          {
+            settings: settings
+          }
+        );
     }
 
-    // loadSettings()
-    // {
-    //   console.log("Loading settings");
-    //   Axios.get("http://localhost:5000/weatherforecast")
-    //   .then(res => {        
-    //     this.setState({ settings: res.data });
-    //   });
-    // }
+    async clearCacheButtonClick()
+    {
+      this.clearCache()
+    }
+
+    async clearCache() {
+      this.props.configuration.clearCache();
+      console.log("Cleared configuration cache");
+      await this.props.reloadSettings();        
+    }
 
     async componentDidMount() {    
         if (!this.props.configuration)
         {
           return;
         }
-      
-        var settings = await this.props.configuration.getSettings();
-        this.setState(
-          {
-            settings: settings
-          }
-        );
+        await this.reloadSettings();        
       }
     
     render() {
@@ -38,20 +45,24 @@ class About extends React.Component {
         <React.Fragment>
             <h2>DIPS EHR web application</h2>
             <p>
-                Version: v1.0.0.0
+                Version: v1.0.0.2
             </p>            
             <h2>
                 Configuration
             </h2>
-            <h3>
-                Settings from {this.props.configuration.getServiceUrl()}:
-            </h3>
+            <p>
+                Configuration service: {this.props.configuration.getServiceUrl()}
+            </p>
+            <p>
+                Environment: {this.props.configuration.getEnvironment()}
+            </p>
             <ul>
               {
                 Object.keys(this.state.settings).map((key, index) => {
                   return <li key={index}>{key}: {this.state.settings[key]}</li>
               })}
             </ul>
+            <button onClick={this.clearCacheButtonClick}>Clear cache</button>
         </React.Fragment>
     )
   }

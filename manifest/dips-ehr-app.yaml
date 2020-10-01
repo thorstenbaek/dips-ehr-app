@@ -16,7 +16,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: dips-ehr-service
-        image: thorstenbaekcontainerregistry.azurecr.io/dips-ehr-app:v1.0.0.0
+        image: thorstenbaekcontainerregistry.azurecr.io/dips-ehr-app:v1.0.0.2
         imagePullPolicy: Always
         ports:        
         - containerPort: 80
