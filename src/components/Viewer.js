@@ -9,7 +9,12 @@ class Viewer extends React.Component {
         
         var container = document.getElementById('container');
         var patientList = document.getElementById('patientList');
-        var frameWidth = container?.clientWidth - patientList?.clientWidth - 10;
+        var frameWidth = 0; 
+        if (container && patientList)
+        {
+            frameWidth = container?.clientWidth - patientList?.clientWidth - 10;
+        }
+
         var frameHeight = 1024;
 
         var hidden = patientId == null || smartApp == null;
@@ -19,8 +24,6 @@ class Viewer extends React.Component {
         {
             url = `${smartApp}/launch.html?fhirServiceUrl=${fhirServiceUrl}&redirect_uri=${smartApp}/index.html&patientId=${patientId}`;    
         }
-        console.log("URL: " + smartApp);
-
 
         return (
             <React.Fragment>
@@ -31,7 +34,8 @@ class Viewer extends React.Component {
                     <iframe hidden={hidden}
                         title="externalView"
                         src={url}
-                        style={{ position: 'absolute', width: '1px', minWidth:frameWidth, height: '1px', minHeight:frameHeight}} />
+                        style={{ position: 'absolute', width: '1px', minWidth:frameWidth, height: '1px', minHeight:frameHeight}}
+                        />
                     </div>
             </React.Fragment>
         )

@@ -2,23 +2,21 @@ import React from 'react';
 import {BrowserRouter as Router, Route } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import Axios from 'axios';
+import Configuration from './components/helpers/Configuration';
 import About from './components/pages/About';
 import Header from './components/layout/Header';
 import Viewer from './components/Viewer';
 import PatientList from './components/PatientList';
-
 import './App.css';
 
-
 class App extends React.Component {
-
   constructor(props) {
     super(props);
 
-    const FHIR_SERVICE_URI = window.FHIR_SERVICE_URI;
-
-    this.state = { 
-      fhirServiceUrl: FHIR_SERVICE_URI,
+    const hostname = window.location.hostname + ":" + window.location.port;
+    
+    this.state = {           
+      configuration: new Configuration(window.CONFIGURATION_SERVICE_URI, hostname),
       patients: [],
       selectedPatient: null,    
       smartApps: [
@@ -29,18 +27,23 @@ class App extends React.Component {
     };    
   }   
 
-  refreshPatients()
+  async refreshPatients()
   {
     console.log("Refresh patients");
-    Axios.get(this.state.fhirServiceUrl + "/Patient")
-    .then(res => {
-      console.log(res.data.entry);
-      this.setState({ patients: res.data.entry.map(p => p.resource) });
-    });
+    var res = await Axios.get(this.state.fhirServiceUrl + "/Patient");
+    
+    console.log(res);
+    this.setState({ patients: res.data.entry.map(p => p.resource) });
   }
 
-  componentDidMount() {
-    this.refreshPatients();
+  async componentDidMount() {
+    await this.state.configuration.loadConfiguration();
+    
+    this.setState({
+      fhirServiceUrl: await this.state.configuration.getSetting("FhirServiceUri")      
+    });
+    
+    await this.refreshPatients();
   }
 
   // set current selected patient
@@ -95,8 +98,7 @@ class App extends React.Component {
               </React.Fragment>
             )} />
             <Route path="/about" render={() => (
-              <About fhirServiceUrl={this.state.fhirServiceUrl} 
-                />
+              <About configuration={this.state.configuration}/>
             )}/>            
           </div>
         </div>
