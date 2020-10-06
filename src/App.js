@@ -14,7 +14,8 @@ class App extends React.Component {
     super(props);
 
     var hostname = window.location.hostname;
-    if (window.location.port !== "80")
+    
+    if (window.location.port !== "")
     {
       console.log(`Adding port '${window.location.port}' to hostname`);
       hostname = hostname + ":" + window.location.port;
@@ -23,12 +24,7 @@ class App extends React.Component {
     this.state = {           
       configuration: new Configuration(window.CONFIGURATION_SERVICE_URI, hostname),    
       patients: [],
-      selectedPatient: null,    
-      smartApps: [
-        {label: "Growth Chart", value: "http://growth-chart-app.northeurope.cloudapp.azure.com"}, 
-        {label: "DIPS Demo", value: "https://dips-smartonfhir-app.northeurope.cloudapp.azure.com"}, 
-        {label: "NAV Pleiepenger", value: "https://nav-smartonfhir-app.azurewebsites.net"}],
-      selectedSmartAppIndex: 0, //Growth Chart
+      selectedPatient: null      
     };    
 
     this.reloadSettings = this.reloadSettings.bind(this);
@@ -47,8 +43,17 @@ class App extends React.Component {
   {
     this.state.configuration.clearCache();
 
+    var smartApps = await this.state.configuration.getSetting("SmartOnFhirApps");
+    var convertedApps = smartApps.map(app => {
+      return {
+        label: app.name,
+        value: app.url
+      };
+    })
+
     this.setState({
-      fhirServiceUrl: await this.state.configuration.getSetting("FhirServiceUri")      
+      fhirServiceUrl: await this.state.configuration.getSetting("FhirServiceUri"),
+      smartApps: convertedApps
     });
   }
 
@@ -89,10 +94,29 @@ class App extends React.Component {
     );
   }
 
-  render() {    
+  render() {        
+    let selectedSmartApp;
 
-    var selectedSmartApp = this.state.smartApps[this.state.selectedSmartAppIndex].value;
-    console.log(selectedSmartApp);
+    if (this.state.smartApps)
+    {            
+      if (this.state.selectedSmartAppIndex)
+      {
+        selectedSmartApp = this.state.smartApps[this.state.selectedSmartAppIndex].value;
+      }
+      else
+      {
+        selectedSmartApp = this.state.smartApps[0].value;
+      }          
+    }
+
+    let viewer;
+
+    if (selectedSmartApp)
+    {
+      viewer = <Viewer smartApp={selectedSmartApp} fhirServiceUrl={this.state.fhirServiceUrl} patient={this.state.selectedPatient} onChange={this.smartAppChange}
+      options={this.state.smartApps} 
+      index={this.state.selectedSmartAppIndex}/>
+    }    
 
     return (    
       <Router>
@@ -102,10 +126,7 @@ class App extends React.Component {
             <Route exact path="/" render={() => (
               <React.Fragment>
                 <PatientList patients={this.state.patients} select={this.selectPatient}/>                    
-
-                <Viewer smartApp={selectedSmartApp} fhirServiceUrl={this.state.fhirServiceUrl} patient={this.state.selectedPatient} onChange={this.smartAppChange}
-                        options={this.state.smartApps} 
-                        index={this.state.selectedSmartAppIndex}/>
+                {viewer}
               </React.Fragment>
             )} />
             <Route path="/about" render={() => (
