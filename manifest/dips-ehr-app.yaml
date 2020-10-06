@@ -16,7 +16,7 @@ spec:
         "beta.kubernetes.io/os": linux
       containers:
       - name: dips-ehr-service
-        image: thorstenbaekcontainerregistry.azurecr.io/dips-ehr-app:v1.0.0.2
+        image: thorstenbaek/dips-ehr-app:v1.0.0.1
         imagePullPolicy: Always
         ports:        
         - containerPort: 80
@@ -28,7 +28,7 @@ metadata:
   labels:
     name: dips-ehr-app
   annotations:
-    service.beta.kubernetes.io/azure-dns-label-name: dips-ehr-app # => http://dips-ehr-app.northeurope.cloudapp.azure.com/
+    service.beta.kubernetes.io/azure-dns-label-name: dips-ehr-app # => http://dips-ehr-app.norwayeast.cloudapp.azure.com/
 spec:
   type: LoadBalancer
   ports:
