@@ -1,4 +1,6 @@
 import React from 'react';
+import SmartAppList from '../SmartAppList'
+
 
 class About extends React.Component {
     
@@ -6,6 +8,7 @@ class About extends React.Component {
         super(props);
     
         this.state = { 
+            fhirServiceUri: "",
             settings: {},
         }
 
@@ -13,12 +16,29 @@ class About extends React.Component {
     }    
 
     async reloadSettings() {
-      var settings = await this.props.configuration.getSettings();
+      var settings = await this.props.configuration.getSetting("SmartOnFhirApps");
+      var fhirServiceUri = await this.props.configuration.getSetting("FhirServiceUri");
+      if (settings)
+      {
+        var convertedSettings = settings.map(app => {
+        return {
+          label: app.name,
+          value: app.url
+        }});
+     
+        this.setState(
+        {
+            settings: convertedSettings
+        });
+      }
+
+      if (fhirServiceUri)
+      {
         this.setState(
           {
-            settings: settings
-          }
-        );
+            fhirServiceUri: fhirServiceUri
+          });
+      }
     }
 
     async clearCacheButtonClick()
@@ -38,10 +58,10 @@ class About extends React.Component {
           return;
         }
         await this.reloadSettings();        
-      }
-    
+    }    
+
     render() {
-    return (
+      return (
         <React.Fragment>
             <h2>DIPS EHR web application</h2>
             <p>
@@ -51,17 +71,16 @@ class About extends React.Component {
                 Configuration
             </h2>
             <p>
-                Configuration service: {this.props.configuration.getServiceUrl()}
+                Configuration Service: {this.props.configuration.getServiceUrl()}
+            </p>
+            <p>
+                FHIR Service: {this.state.fhirServiceUri}
             </p>
             <p>
                 Environment: {this.props.configuration.getEnvironment()}
             </p>
-            <ul>
-              {
-                Object.keys(this.state.settings).map((key, index) => {
-                  return <li key={index}>{key}: {this.state.settings[key]}</li>
-              })}
-            </ul>
+            
+            <SmartAppList apps={this.state.settings}/>
             <button onClick={this.clearCacheButtonClick}>Clear cache</button>
         </React.Fragment>
     )

@@ -9,6 +9,9 @@ import Viewer from './components/Viewer';
 import PatientList from './components/PatientList';
 import './App.css';
 
+//https://github.com/login/oauth/authorize?client_id=da6e0157f0262ecf9320&redirect_uri=https://sandbox-dev.norwayeast.cloudapp.azure.com/oauth2
+//https://github.com/login/oauth/access_token?client_id=da6e0157f0262ecf9320&client_secret=07ca50b2d8fb7e5d9a5b2094b9be30965a0751f9&code=a20d0e818397d534cfb3&redirect_uri=https://sandbox-dev.norwayeast.cloudapp.azure.com/oauth2&state=123456
+
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -44,12 +47,17 @@ class App extends React.Component {
     this.state.configuration.clearCache();
 
     var smartApps = await this.state.configuration.getSetting("SmartOnFhirApps");
-    var convertedApps = smartApps.map(app => {
-      return {
-        label: app.name,
-        value: app.url
-      };
-    })
+    console.log(smartApps);
+    if (smartApps)
+    {
+      var convertedApps = smartApps.map(app => {
+        console.log(app);
+        return {
+          label: app.name,
+          value: app.url
+        };
+      });
+    }
 
     this.setState({
       fhirServiceUrl: await this.state.configuration.getSetting("FhirServiceUri"),
@@ -60,6 +68,18 @@ class App extends React.Component {
   async componentDidMount() {
     await this.reloadSettings();
     await this.refreshPatients();
+  }
+
+  onLoggedIn = (token) => {
+    this.setState({
+      token: token
+    })
+  }
+
+  onLoggedOut = () => {
+    this.setState({
+      token: null
+    })
   }
 
   // set current selected patient
@@ -94,6 +114,13 @@ class App extends React.Component {
     );
   }
 
+  onSuccess()
+  {
+  }
+
+  onFailure()
+  {}
+
   render() {        
     let selectedSmartApp;
 
@@ -118,23 +145,32 @@ class App extends React.Component {
       index={this.state.selectedSmartAppIndex}/>
     }    
 
-    return (    
+    var content = this.state.token ? 
+                  <React.Fragment>
+                    <PatientList patients={this.state.patients} select={this.selectPatient}/>                    
+                    {viewer}
+                  </React.Fragment>
+                  : 
+                  <React.Fragment>
+                    <h3>Sign in to view data</h3>
+                  </React.Fragment>
+
+    return (  
       <Router>
         <div className="App">
-          <div className="container" id="container" style={{overflow:'hidden'}}>            
-            <Header/>                        
+          <div className="container" id="container" style={{overflow:'hidden'}}>                        
+            <Header onLoggedIn={this.onLoggedIn} onLoggedOut={this.onLoggedOut}/>                                    
             <Route exact path="/" render={() => (
               <React.Fragment>
-                <PatientList patients={this.state.patients} select={this.selectPatient}/>                    
-                {viewer}
-              </React.Fragment>
+                {content}
+              </React.Fragment>              
             )} />
             <Route path="/about" render={() => (
               <About configuration={this.state.configuration} reloadSettings={this.reloadSettings}/>
             )}/>            
           </div>
         </div>
-      </Router>  
+      </Router>                                                              
     );
   } 
 }
