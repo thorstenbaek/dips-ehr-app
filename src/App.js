@@ -9,9 +9,6 @@ import Viewer from './components/Viewer';
 import PatientList from './components/PatientList';
 import './App.css';
 
-//https://github.com/login/oauth/authorize?client_id=da6e0157f0262ecf9320&redirect_uri=https://sandbox-dev.norwayeast.cloudapp.azure.com/oauth2
-//https://github.com/login/oauth/access_token?client_id=da6e0157f0262ecf9320&client_secret=07ca50b2d8fb7e5d9a5b2094b9be30965a0751f9&code=a20d0e818397d534cfb3&redirect_uri=https://sandbox-dev.norwayeast.cloudapp.azure.com/oauth2&state=123456
-
 class App extends React.Component {
   constructor(props) {
     super(props);
@@ -141,19 +138,21 @@ class App extends React.Component {
     if (selectedSmartApp)
     {
       viewer = <Viewer smartApp={selectedSmartApp} fhirServiceUrl={this.state.fhirServiceUrl} patient={this.state.selectedPatient} onChange={this.smartAppChange}
-      options={this.state.smartApps} 
-      index={this.state.selectedSmartAppIndex}/>
+                      options={this.state.smartApps} 
+                      index={this.state.selectedSmartAppIndex}
+                      token={this.state.token}
+      />
     }    
 
-    var content = this.state.token ? 
+    var content = //this.state.token ? 
                   <React.Fragment>
                     <PatientList patients={this.state.patients} select={this.selectPatient}/>                    
                     {viewer}
                   </React.Fragment>
-                  : 
+                  /*: 
                   <React.Fragment>
                     <h3>Sign in to view data</h3>
-                  </React.Fragment>
+                  </React.Fragment>*/
 
     return (  
       <Router>
