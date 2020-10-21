@@ -8,7 +8,7 @@ class Header extends React.Component {
     {    
         return (
             <header style={blackStyle}>
-                <OAuthLoginControl style={loginStyle} onLoggedIn={this.props.onLoggedIn} onLoggedOut={this.props.onLoggedOut} />   
+                {/* <OAuthLoginControl style={loginStyle} onLoggedIn={this.props.onLoggedIn} onLoggedOut={this.props.onLoggedOut} />    */}
                 <div style={headerStyle}>                
                     <h1>DIPS EHR</h1>                
                     <Link style={linkStyle} to="/">Home</Link> | <Link style={linkStyle} to="/about">About</Link>
