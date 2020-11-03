@@ -22,7 +22,7 @@ class Viewer extends React.Component {
         var url = "";
         if (patientId != null)
         {
-            url = `${smartApp}/launch.html?iss=${fhirServiceUrl}&launch=${patientId}`   
+            url = `${smartApp}?iss=${fhirServiceUrl}&launch=${patientId}`   
         }
 
         return (
