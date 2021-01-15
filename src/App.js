@@ -4,7 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 import Axios from 'axios';
 import Configuration from './components/helpers/Configuration';
 import About from './components/pages/About';
-import Header from './components/layout/Header';
+import Toolbar from './components/layout/Toolbar/Toolbar';
+import SideDrawer from './components/layout/SideDrawer/SideDrawer';
+import Backdrop from './components/Backdrop/Backdrop';
 import Viewer from './components/Viewer';
 import PatientList from './components/PatientList';
 import './App.css';
@@ -24,11 +26,12 @@ class App extends React.Component {
     this.state = {           
       configuration: new Configuration(window.CONFIGURATION_SERVICE_URI, hostname),    
       patients: [],
-      selectedPatient: null      
+      selectedPatient: null,
+      sideDrawerOpen: false  
     };    
 
     this.reloadSettings = this.reloadSettings.bind(this);
-  }   
+  }     
 
   async refreshPatients()
   {
@@ -118,6 +121,16 @@ class App extends React.Component {
   onFailure()
   {}
 
+  backdropClickHandler = () => {
+    this.setState({sideDrawerOpen: false});
+  }
+
+  drawerToggleButtonClickHandler = () => {
+    this.setState((previousState) => {
+      return {sideDrawerOpen: !previousState.sideDrawerOpen};
+    });
+  };
+
   render() {        
     let selectedSmartApp;
 
@@ -154,22 +167,34 @@ class App extends React.Component {
                     <h3>Sign in to view data</h3>
                   </React.Fragment>*/
 
-    return (  
-      <Router>
-        <div className="App">
-          <div className="container" id="container" style={{overflow:'hidden'}}>                        
-            <Header onLoggedIn={this.onLoggedIn} onLoggedOut={this.onLoggedOut}/>                                    
-            <Route exact path="/" render={() => (
-              <React.Fragment>
-                {content}
-              </React.Fragment>              
-            )} />
-            <Route path="/about" render={() => (
-              <About configuration={this.state.configuration} reloadSettings={this.reloadSettings}/>
-            )}/>            
+    let backdrop;
+
+    if (this.state.sideDrawerOpen) {
+      backdrop = <Backdrop click={this.backdropClickHandler}/>;
+    }
+
+    return (        
+        
+        <div className="App" style={{height:'100%'}}>
+          <Toolbar drawerClickHandler={this.drawerToggleButtonClickHandler}/>
+          <SideDrawer show={this.state.sideDrawerOpen}/>
+          {backdrop}
+          {/* <Header onLoggedIn={this.onLoggedIn} onLoggedOut={this.onLoggedOut}/>*/}          
+          
+          
+          <div className="container" id="container">
+            <Router>        
+              <Route exact path="/" render={() => (
+                <React.Fragment>
+                  {content}
+                </React.Fragment>              
+              )} />
+              <Route path="/about" render={() => (
+                <About configuration={this.state.configuration} reloadSettings={this.reloadSettings}/>
+              )}/>  
+            </Router>                                                              
           </div>
-        </div>
-      </Router>                                                              
+        </div>      
     );
   } 
 }

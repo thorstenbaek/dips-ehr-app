@@ -1,5 +1,6 @@
 import React from 'react';
-import SmartAppList from '../SmartAppList'
+import SmartAppList from '../SmartAppList';
+import './About.css';
 
 
 class About extends React.Component {
@@ -11,8 +12,6 @@ class About extends React.Component {
             fhirServiceUri: "",
             settings: {},
         }
-
-        this.clearCacheButtonClick = this.clearCacheButtonClick.bind(this);
     }    
 
     async reloadSettings() {
@@ -39,17 +38,6 @@ class About extends React.Component {
             fhirServiceUri: fhirServiceUri
           });
       }
-    }
-
-    async clearCacheButtonClick()
-    {
-      this.clearCache()
-    }
-
-    async clearCache() {
-      this.props.configuration.clearCache();
-      console.log("Cleared configuration cache");
-      await this.props.reloadSettings();        
     }
 
     async componentDidMount() {    
@@ -81,7 +69,7 @@ class About extends React.Component {
             </p>
             
             <SmartAppList apps={this.state.settings}/>
-            <button onClick={this.clearCacheButtonClick}>Clear cache</button>
+            
         </React.Fragment>
     )
   }
