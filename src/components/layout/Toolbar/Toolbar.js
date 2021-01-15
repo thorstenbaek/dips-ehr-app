@@ -11,7 +11,7 @@ const Toolbar = props => (
             </div>
             <div className="toolbar__logo">
                 <a href="/">
-                    <img src="./images/DIPS-sandbox-logo.png"/> 
+                <img height="52" width="239" src="./images/DIPS-sandbox-logo.png"/> 
                 </a>            
             </div>
             <div className="spacer"/>
