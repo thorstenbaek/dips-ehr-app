@@ -1,6 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Toolbar.css';
 import '../SideDrawer/DrawerToggleButton';
+import logo from './DIPS-Sandbox-logo.png';
 import DrawerToggleButton from '../SideDrawer/DrawerToggleButton';
 
 const Toolbar = props => (
@@ -11,14 +13,14 @@ const Toolbar = props => (
             </div>
             <div className="toolbar__logo">
                 <a href="/">
-                <img height="52" width="239" src="./images/DIPS-sandbox-logo.png"/> 
+                <img height="52" width="239" src={logo}/> 
                 </a>            
             </div>
             <div className="spacer"/>
             <div className="toolbar__navigation-items">
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/about">About</a></li>
+                <ul>                    
+                    <li><Link to="/">Home</Link></li>
+                    <li><Link to="/about">About</Link></li>
                 </ul>
             </div>
         </nav>

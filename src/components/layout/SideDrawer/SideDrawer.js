@@ -1,19 +1,27 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './SideDrawer.css';
 
-const SideDrawer = props => {
-    let drawerClasses = 'side-drawer';
-    if (props.show) {
-      drawerClasses = 'side-drawer open';
+class SideDrawer extends React.Component {
+
+    hideMe = () => {
+        this.props.hide();
     }
 
-    return (<nav className={drawerClasses}>
-        <ul>
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
-        </ul>
-    </nav>
-    );
+    render() {
+        let drawerClasses = 'side-drawer';
+        if (this.props.show) {
+        drawerClasses = 'side-drawer open';
+        }
+
+        return (<nav className={drawerClasses}>
+            <ul>
+                <li><Link to="/" onClick={this.hideMe}>Home</Link></li>
+                <li><Link to="/about" onClick={this.hideMe}>About</Link></li>
+            </ul>
+        </nav>
+        );
+    }
 }
 
 export default SideDrawer;  

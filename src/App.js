@@ -64,7 +64,7 @@ class App extends React.Component {
       smartApps: convertedApps
     });
   }
-
+  
   async componentDidMount() {
     await this.reloadSettings();
     await this.refreshPatients();
@@ -174,16 +174,16 @@ class App extends React.Component {
     }
 
     return (        
-        
+      <Router>        
         <div className="App" style={{height:'100%'}}>
           <Toolbar drawerClickHandler={this.drawerToggleButtonClickHandler}/>
-          <SideDrawer show={this.state.sideDrawerOpen}/>
+          <SideDrawer show={this.state.sideDrawerOpen} hide={this.backdropClickHandler}/>
           {backdrop}
           {/* <Header onLoggedIn={this.onLoggedIn} onLoggedOut={this.onLoggedOut}/>*/}          
           
           
           <div className="container" id="container">
-            <Router>        
+            
               <Route exact path="/" render={() => (
                 <React.Fragment>
                   {content}
@@ -192,9 +192,10 @@ class App extends React.Component {
               <Route path="/about" render={() => (
                 <About configuration={this.state.configuration} reloadSettings={this.reloadSettings}/>
               )}/>  
-            </Router>                                                              
+      
           </div>
         </div>      
+        </Router>                                                              
     );
   } 
 }
