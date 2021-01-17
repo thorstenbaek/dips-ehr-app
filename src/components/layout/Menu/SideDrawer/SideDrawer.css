@@ -29,14 +29,14 @@
 }
 
 .side-drawer a {
-    color: #047f89;
+    color: #15576b;
     text-decoration: none;
     font-size: 1.2rem;
 }
 
 .side-drawer a:hover,
 .side-drawer a:active {
-    color: #73b2b9;
+    color: #1fa7b2;
 }
 
 @media (min-width: 769px)

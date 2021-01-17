@@ -11,15 +11,15 @@ class PatientItem extends React.Component {
     }
     
     render() {
-        const {id, name, birthDate} = this.props.patient;
+        const {id, familyName, givenName, birthDate} = this.props.patient;
 
         return  <tr style={ this.getStyle() } 
                     onClick={this.props.select.bind(this, id)}>
                     <td>
-                        {name[0].given}
+                        {familyName}
                     </td>
                     <td>
-                        {name[0].family}
+                        {givenName}
                     </td>
                     <td>
                         {birthDate}

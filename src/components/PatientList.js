@@ -9,9 +9,9 @@ class PatientList extends React.Component {
         <table>     
           <thead>
             <tr>
-              <th>Fornavn</th>
-              <th>Etternavn</th>
-              <th>Født</th>
+              <th>Family</th>
+              <th>Given</th>
+              <th>Born</th>
             </tr>
           </thead>     
           <tbody>            

@@ -1,6 +1,6 @@
 .toolbar {
     width: 100%;
-    background: #047f89;
+    background: #15576b;
 }
 
 .toolbar__navigation {
@@ -43,7 +43,7 @@
 
 .toolbar__navigation-items a:hover,
 .toolbar__navigation-items a:active {
-    color: #cedce0;
+    color: #1fa7b2;
 }
 
 @media (max-width: 768px) {

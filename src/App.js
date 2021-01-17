@@ -4,11 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 import Axios from 'axios';
 import Configuration from './components/helpers/Configuration';
 import About from './components/pages/About';
-import Toolbar from './components/layout/Toolbar/Toolbar';
-import SideDrawer from './components/layout/SideDrawer/SideDrawer';
+import Toolbar from './components/layout/Menu/Toolbar/Toolbar';
+import SideDrawer from './components/layout/Menu/SideDrawer/SideDrawer';
 import Backdrop from './components/Backdrop/Backdrop';
+import PatientBanner from './components/layout/Patient/Banner/Banner';
 import Viewer from './components/Viewer';
 import PatientList from './components/PatientList';
+import Patient from './components/Models/Patient';
 import './App.css';
 
 class App extends React.Component {
@@ -39,7 +41,7 @@ class App extends React.Component {
     var res = await Axios.get(this.state.fhirServiceUrl + "/Patient");
     
     console.log(res);
-    this.setState({ patients: res.data.entry.map(p => p.resource) });
+    this.setState({ patients: res.data.entry.map(p => new Patient(p.resource)) });    
   }
 
   async reloadSettings()
@@ -101,18 +103,18 @@ class App extends React.Component {
     )
   }
 
-  addPatient = (patient) => {
-    const newPatient = {
-      id: uuidv4(),
-      firstName: patient.firstName,
-      lastName: patient.lastName,
-      birthDate: patient.birthDate
-    }
+  // addPatient = (patient) => {
+  //   const newPatient = {
+  //     id: uuidv4(),
+  //     firstName: patient.firstName,
+  //     lastName: patient.lastName,
+  //     birthDate: patient.birthDate
+  //   }
 
-    this.setState({
-      patients: [...this.state.patients, newPatient]}
-    );
-  }
+  //   this.setState({
+  //     patients: [...this.state.patients, newPatient]}
+  //   );
+  // }
 
   onSuccess()
   {
@@ -178,6 +180,7 @@ class App extends React.Component {
         <div className="App" style={{height:'100%'}}>
           <Toolbar drawerClickHandler={this.drawerToggleButtonClickHandler}/>
           <SideDrawer show={this.state.sideDrawerOpen} hide={this.backdropClickHandler}/>
+          
           {backdrop}
           {/* <Header onLoggedIn={this.onLoggedIn} onLoggedOut={this.onLoggedOut}/>*/}          
           
@@ -186,6 +189,7 @@ class App extends React.Component {
             
               <Route exact path="/" render={() => (
                 <React.Fragment>
+                  <PatientBanner patient={this.state.selectedPatient}/>
                   {content}
                 </React.Fragment>              
               )} />
