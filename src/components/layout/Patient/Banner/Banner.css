@@ -1,6 +1,6 @@
 .grid-container {
     display: grid;    
-    grid-template-columns: 40px auto;
+    grid-template-columns: 40px auto 40px;
     grid-template-rows: 2.2rem 1.5rem;    
     background-color: #e6e6e6;    
     margin: 0;
@@ -17,6 +17,26 @@
 .grid-container li {    
     list-style-position: inside;    
     float: left;
+}
+
+.patient-close-button {
+    color:#15576b;    
+    font-weight: bold;
+    font-size: 2rem;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    grid-column: 3;
+    grid-row: 1 / span 2;
+}
+.patient-close-button:hover {
+    color: #1fa7b2;
+}
+
+.patient-close-button:focus {
+    outline: none;
 }
 
 .female {

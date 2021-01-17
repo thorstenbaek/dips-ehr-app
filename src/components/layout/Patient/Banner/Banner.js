@@ -26,6 +26,7 @@ class Banner extends React.Component {
                         <li className="patient-data-age">{this.props.patient.age()} years</li>
                         <li className="patient-data-gender">{this.capitalize(gender)}</li>
                     </ul>
+                    <button className="patient-close-button" onClick={this.props.click}>X</button>
                 </div>);    
         }
         else

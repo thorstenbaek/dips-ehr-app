@@ -12,8 +12,6 @@ class Patient {
         this.gender = resource.gender;
     }
     
-    
-    
     getSSN = () => {
         var ssn = this.resource.identifier.filter(i => i.system == 'http://hl7.org/fhir/sid/us-ssn');
         return ssn[0]?.value;        

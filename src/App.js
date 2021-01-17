@@ -72,6 +72,12 @@ class App extends React.Component {
     await this.refreshPatients();
   }
 
+  closePatient = () => {
+    this.setState({
+      selectedPatient: null
+    });
+  }
+
   onLoggedIn = (token) => {
     this.setState({
       token: token
@@ -189,7 +195,7 @@ class App extends React.Component {
             
               <Route exact path="/" render={() => (
                 <React.Fragment>
-                  <PatientBanner patient={this.state.selectedPatient}/>
+                  <PatientBanner patient={this.state.selectedPatient} click={this.closePatient}/>
                   {content}
                 </React.Fragment>              
               )} />
