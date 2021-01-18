@@ -1,0 +1,22 @@
+.search {    
+    background-color: #e6e6e6;        
+}
+
+.search-input {
+    margin: 5px 5px;
+}
+
+.search-button {
+    background:#15576b;    
+    color: white;
+    font-size: 1rem;    
+    border: none;  
+}
+
+.search-button:focus {
+    border: none;  
+}
+
+.search-button:hover {
+    color: #1fa7b2;
+}

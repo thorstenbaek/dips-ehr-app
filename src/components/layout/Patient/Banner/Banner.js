@@ -12,25 +12,25 @@ class Banner extends React.Component {
     }
 
     render() {
-
-        if (this.props.patient != null)
+        if (this.props.patient == null)
         {
-            const {ssn, fullName, birthDate, gender} = this.props.patient;
-
-            return (
-                <div className="grid-container">
-                    <div className={`icon ${gender}`}></div>                
-                    <div className="patient-name">{fullName}</div>
-                    <ul className="patient-data">
-                        <li className="patient-data-ssn">{ssn}</li>
-                        <li className="patient-data-age">{this.props.patient.age()} years</li>
-                        <li className="patient-data-gender">{this.capitalize(gender)}</li>
-                    </ul>
-                    <button className="patient-close-button" onClick={this.props.click}>X</button>
-                </div>);    
+            return;
         }
-        else
-            return (<div/>); 
+
+
+        const {ssn, fullName, gender} = this.props.patient;
+
+        return (
+            <div className="grid-container">
+                <div className={`icon ${gender}`}></div>                
+                <div className="patient-name">{fullName}</div>
+                <ul className="patient-data">
+                    <li className="patient-data-ssn">{ssn}</li>
+                    <li className="patient-data-age">{this.props.patient.age()} years</li>
+                    <li className="patient-data-gender">{this.capitalize(gender)}</li>
+                </ul>
+                <button className="patient-close-button" onClick={this.props.click}>X</button>
+            </div>);    
     }
 }
 

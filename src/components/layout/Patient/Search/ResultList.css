@@ -1,0 +1,7 @@
+tr:nth-child(even) {
+    background: hsl(0, 0%, 91%);    
+}
+
+tr:nth-child(odd) {
+    background: hsl(0, 0%, 95%)
+}

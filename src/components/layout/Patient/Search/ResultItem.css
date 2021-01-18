@@ -1,0 +1,22 @@
+.result-item:hover {
+    background: #15576b;
+    color: white;
+}
+
+.result-item-ssn {
+    padding: 5px;
+}
+
+.result-item-family-name {
+    padding: 5px;
+    font-weight: bold;
+}
+
+.result-item-given-name {
+    padding: 5px;
+    font-weight: bold;
+}
+
+.result-item-age {
+    padding: 5px;
+}
