@@ -5,3 +5,13 @@ tr:nth-child(even) {
 tr:nth-child(odd) {
     background: hsl(0, 0%, 95%)
 }
+
+table {
+    width: 100%;
+    max-width: 800px;
+    border-collapse: collapse;
+}
+
+.result-list-status {
+    margin: 4px;
+}

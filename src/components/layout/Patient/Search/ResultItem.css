@@ -4,19 +4,24 @@
 }
 
 .result-item-ssn {
-    padding: 5px;
+    padding: 4px;
+}
+
+.result-item-gender {
+    font-family: 'Impact';
+    font-weight: bold;
 }
 
 .result-item-family-name {
-    padding: 5px;
+    padding: 4px;
     font-weight: bold;
 }
 
 .result-item-given-name {
-    padding: 5px;
+    padding: 4px;
     font-weight: bold;
 }
 
 .result-item-age {
-    padding: 5px;
+    padding: 4px;
 }
