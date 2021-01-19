@@ -1,0 +1,27 @@
+.result-item:hover {
+    background: #15576b;
+    color: white;
+}
+
+.result-item-ssn {
+    padding: 4px;
+}
+
+.result-item-gender {
+    font-family: 'Impact';
+    font-weight: bold;
+}
+
+.result-item-family-name {
+    padding: 4px;
+    font-weight: bold;
+}
+
+.result-item-given-name {
+    padding: 4px;
+    font-weight: bold;
+}
+
+.result-item-age {
+    padding: 4px;
+}
