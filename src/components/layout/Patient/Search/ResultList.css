@@ -7,11 +7,17 @@ tr:nth-child(odd) {
 }
 
 table {
-    width: 100%;
-    max-width: 800px;
+    width: 100%;    
     border-collapse: collapse;
 }
 
-.result-list-status {
-    margin: 4px;
+.result-list {
+    background: hsl(0, 0%, 91%);    
+    width: 100%;
+    max-width: 800px;
+}
+
+.result-list-status {    
+    padding: 4px;
+    margin: 0px;    
 }

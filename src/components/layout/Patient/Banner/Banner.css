@@ -1,20 +1,21 @@
-.grid-container {
+.patient {
     display: grid;    
     grid-template-columns: 40px auto 40px;
     grid-template-rows: 2.2rem 1.5rem;    
     background-color: #e6e6e6;    
     margin: 0;
     padding: 0;
+    height: 60px;
 }
 
-.grid-container div,
-.grid-container ul {
+.patient div,
+.patient ul {
     background-color: #e6e6e6;    
     text-align: left;
     padding: 0 0;
 }
 
-.grid-container li {    
+.patient li {    
     list-style-position: inside;    
     float: left;
 }

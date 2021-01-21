@@ -21,7 +21,7 @@ class Banner extends React.Component {
         const {ssn, fullName, gender} = this.props.patient;
 
         return (
-            <div className="grid-container">
+            <div className="patient">
                 <div className={`icon ${gender}`}></div>                
                 <div className="patient-name">{fullName}</div>
                 <ul className="patient-data">
