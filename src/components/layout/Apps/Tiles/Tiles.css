@@ -1,0 +1,15 @@
+.tiles {
+    float: left;
+    overflow: hidden;
+    width: 72px;
+    height: 100%;
+    background: #15576b;
+}
+
+.tiles ul {
+    padding: 0;
+}
+
+.tiles a {
+    color: white;
+}

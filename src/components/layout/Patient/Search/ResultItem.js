@@ -18,7 +18,7 @@ const ResultItem = props => {
                     <td className="result-item-given-name">{givenName}</td>
                     <td className="result-item-age">{props.patient.age()} y</td>
                 </tr>
-            )}                
+            )}
         </PatientContext.Consumer>)
 } 
 

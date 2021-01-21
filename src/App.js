@@ -7,9 +7,10 @@ import SideDrawer from './components/layout/Menu/SideDrawer/SideDrawer';
 import Backdrop from './components/Backdrop/Backdrop';
 import PatientBanner from './components/layout/Patient/Banner/Banner';
 import PatientSearch from './components/layout/Patient/Search/Search';
-import Viewer from './components/Viewer';
+import Apps from './components/layout/Apps/Apps';
 import PatientContext from './components/Context/PatientContext';
 import './App.css';
+import SmartApp from './components/Models/SmartApp';
 
 class App extends React.Component {
   constructor(props) {
@@ -39,20 +40,17 @@ class App extends React.Component {
     this.state.configuration.clearCache();
 
     var smartApps = await this.state.configuration.getSetting("SmartOnFhirApps");
-    console.log(smartApps);
     if (smartApps)
     {
       var convertedApps = smartApps.map(app => {
-        console.log(app);
-        return {
-          label: app.name,
-          value: app.url
-        };
+        return new SmartApp(app.url, app.name);        
       });
     }
 
+    var fhirService = await this.state.configuration.getSetting("FhirServiceUri");
+
     this.setState({
-      fhirServiceUrl: await this.state.configuration.getSetting("FhirServiceUri"),
+      fhirServiceUrl: fhirService,
       smartApps: convertedApps
     });
   }
@@ -108,13 +106,8 @@ class App extends React.Component {
       {searchResults: results});
   }
 
-  // set current selected patient
-  searchSelectHandler = selected => {            
-    this.setState({selectedPatient: this.state.patients.filter(patient => patient.id === selected)[0]})
-  }
-
   render() {        
-    let selectedSmartApp;
+    /*let selectedSmartApp;
 
     if (this.state.smartApps)
     {            
@@ -126,23 +119,20 @@ class App extends React.Component {
       {
         selectedSmartApp = this.state.smartApps[0].value;
       }          
-    }
+    }*/
 
-    let viewer;
+    // if (selectedSmartApp)
+    // {
+    //   viewer = <Viewer smartApp={selectedSmartApp} fhirServiceUrl={this.state.fhirServiceUrl} patient={this.state.selectedPatient} onChange={this.smartAppChange}
+    //                   options={this.state.smartApps} 
+    //                   index={this.state.selectedSmartAppIndex}
+    //                   token={this.state.token}
+    //   />
+    // }    
 
-    if (selectedSmartApp)
-    {
-      viewer = <Viewer smartApp={selectedSmartApp} fhirServiceUrl={this.state.fhirServiceUrl} patient={this.state.selectedPatient} onChange={this.smartAppChange}
-                      options={this.state.smartApps} 
-                      index={this.state.selectedSmartAppIndex}
-                      token={this.state.token}
-      />
-    }    
-
-    var content = this.state.searchResults != null ? 
-                  this.state.searchResults :                 
-                  viewer
-                  
+     var content = this.state.searchResults != null ? 
+                   this.state.searchResults :                 
+                   <Apps apps={this.state.smartApps}/>               
                   
     var patientPanel = this.state.selectedPatient ? 
       (<PatientBanner patient={this.state.selectedPatient} click={this.closePatient}/>) : 
@@ -150,33 +140,29 @@ class App extends React.Component {
           onSearch={this.doSearchHandler} 
           fhirServiceUrl={this.state.fhirServiceUrl} />);
 
-    let backdrop;
-
+    var backdrop;
     if (this.state.sideDrawerOpen) {
       backdrop = <Backdrop click={this.backdropClickHandler}/>;
     }
 
     return (        
       <PatientContext.Provider value={this.state}>
-        <Router>        
-          <div className="App" style={{height:'100%'}}>
+        <Router>                 
             <Toolbar drawerClickHandler={this.drawerToggleButtonClickHandler}/>
             <SideDrawer show={this.state.sideDrawerOpen} hide={this.backdropClickHandler}/>
-            
             {backdrop}                        
-            
-            <div className="container" id="container">              
+            <div className="container">              
                 <Route exact path="/" render={() => (
-                  <React.Fragment>                  
-                    {patientPanel}
+                  <>                  
+                    {patientPanel}                    
                     {content}
-                  </React.Fragment>              
+                  </>              
                 )} />
                 <Route path="/about" render={() => (
                   <About configuration={this.state.configuration} reloadSettings={this.reloadSettings}/>
                 )}/>  
             </div>
-          </div>      
+          
         </Router>                                                              
       </PatientContext.Provider>
     );

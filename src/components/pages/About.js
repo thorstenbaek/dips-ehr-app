@@ -50,7 +50,7 @@ class About extends React.Component {
 
     render() {
       return (
-        <React.Fragment>
+        <div className="about">
             <h2>DIPS EHR web application</h2>
             <p>
                 Version: v1.0.0.2
@@ -70,7 +70,7 @@ class About extends React.Component {
             
             <SmartAppList apps={this.state.settings}/>
             
-        </React.Fragment>
+        </div>
     )
   }
 }
