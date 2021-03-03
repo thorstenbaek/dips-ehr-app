@@ -7,7 +7,8 @@ class Apps extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {            
+        this.state = {  
+            apps: this.props.apps,          
             running: [],
             active: null,
             run: this.run
@@ -46,7 +47,7 @@ class Apps extends React.Component {
     render = () => {
         return (
             <AppContext.Provider value={this.state}>
-                <Tiles tiles={this.props.apps} />
+                <Tiles tiles={this.state.apps} />
                 <Workspace active={this.state.active} onClose={this.close} onSelect={this.select}/>                         
             </AppContext.Provider>)
     }

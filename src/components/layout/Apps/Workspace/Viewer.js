@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import IframeResizer from 'iframe-resizer-react';
 import PatientContext from '../../../Context/PatientContext';
 
@@ -10,15 +10,23 @@ const Viewer = props => {
                 var patientId = selectedPatient?.id;
                 
                 var url = "";
-                if (patientId != null && props.app?.value != "") {
-                    url = `${props.app?.value}?iss=${fhirServiceUrl}&launch=${patientId}`;
-                    return (
-                        
-                            <IframeResizer                                                                            
-                                src={url}
-                                height="1024px"
-                                style={{ width: '1px', minWidth: '100%', border: 'none', overflow: 'auto'}} />
-                        )
+                if (patientId != null) {
+                    if (props.app?.url != null) {
+                        url = `${props.app?.url}?iss=${fhirServiceUrl}&launch=${patientId}`;
+                        return (
+                            
+                                <IframeResizer                                                                            
+                                    src={url}
+                                    height="1024px"
+                                    style={{ width: '1px', minWidth: '100%', border: 'none', overflow: 'auto'}} />
+                            )
+                    }
+                    else if (props.app?.component != "") {
+                         return props.app?.component;
+                    }
+                    else {
+                        return (<div>Missing context for SMART app</div>)
+                    }
                 }
                 else
                 {                                
