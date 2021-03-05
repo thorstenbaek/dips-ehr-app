@@ -15,11 +15,10 @@ class DocumentList extends React.Component {
     async componentDidMount()
     {
         const url = `${this.props.fhirServiceUrl}/documentreference?patient=${this.props.patient.id}`;
-        var response = await fetch(url);
-        var json = await response.json();    
-        console.log(json);
+        var response = await fetch(url);        
+        var bundle = await response.json();    
         this.setState({
-            documents: json.map(d => new DocumentReference(d.resource))
+            documents: bundle?.entry.map(d => new DocumentReference(d.resource))
         });
     }
 

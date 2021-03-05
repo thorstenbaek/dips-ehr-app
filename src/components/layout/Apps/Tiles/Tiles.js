@@ -9,8 +9,8 @@ const Tiles = props => {
             {({selectedPatient}) => (                                
             <div className="tiles">
                 <ul>
-                {props?.tiles?.map((tile, index) =>
-                    <Tile key={index} tile={tile} active={selectedPatient != null}/>)}                                        
+                {props?.apps?.map((app, index) =>
+                    <Tile key={index} app={app} active={selectedPatient != null}/>)}                                        
                 </ul>
             </div>)}
         </PatientContext.Consumer>)

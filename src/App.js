@@ -10,8 +10,6 @@ import PatientSearch from './components/layout/Patient/Search/Search';
 import Apps from './components/layout/Apps/Apps';
 import PatientContext from './components/Context/PatientContext';
 import './App.css';
-import SmartApp from './components/Models/SmartApp';
-import Documents from './components/layout/Apps/Documents/Documents';
 
 class App extends React.Component {
   constructor(props) {
@@ -28,47 +26,19 @@ class App extends React.Component {
     this.state = {           
       configuration: new Configuration(window.CONFIGURATION_SERVICE_URI, hostname),    
       selectedPatient: null,
-      selectPatient: this.selectPatient,
-      openDocument: this.openDocument,
+      selectPatient: this.selectPatient,      
       sideDrawerOpen: false,
       searchResults: null 
     };    
 
-    this.reloadSettings = this.reloadSettings.bind(this);
-  }     
-
-  async reloadSettings()
-  {
-    this.state.configuration.clearCache();
-
-    var smartApps = await this.state.configuration.getSetting("SmartOnFhirApps");
-    if (smartApps)
-    {
-      var convertedApps = smartApps.map(app => {
-        return new SmartApp(app.url, null, app.name);        
-      });
-    }
-
-    var fhirService = await this.state.configuration.getSetting("FhirServiceUri");
-      
-    var documentList = new SmartApp(
-      null, 
-      (<Documents fhirServiceUrl={fhirService} patient={this.state.selectedPatient} />), 
-      "Documents");
-
-    this.setState({
-      fhirServiceUrl: fhirService,
-      smartApps: [documentList, ...convertedApps]
-    });    
-  }
+    this.state.configuration.getSetting("FhirServiceUri").then(fhirService => {
+      console.log(fhirService);
+      this.setState({
+        fhirServiceUrl: fhirService
+      });    
+    });   
+  } 
   
-  async componentDidMount() {
-    await this.reloadSettings();    
-  }
-
-  openDocument = (id) => {
-    console.log("OpenDocument " + id);
-  }
 
   closePatient = () => {
     this.setState({
@@ -95,13 +65,6 @@ class App extends React.Component {
     })
   }
 
-  smartAppChange = (event) => {
-    this.setState({
-      selectedSmartAppIndex: this.state.smartApps.findIndex(item => item.value === event.target.value)
-      }
-    )
-  }
-
   backdropClickHandler = () => {
     this.setState({sideDrawerOpen: false});
   }
@@ -120,7 +83,7 @@ class App extends React.Component {
   render() {            
     var content = this.state.searchResults != null ? 
                    this.state.searchResults :                 
-                   <Apps apps={this.state.smartApps}/>               
+                   <Apps apps={this.state.smartApps} configuration={this.state.configuration}/>               
                   
     var patientPanel = this.state.selectedPatient ? 
       (<PatientBanner patient={this.state.selectedPatient} click={this.closePatient}/>) : 

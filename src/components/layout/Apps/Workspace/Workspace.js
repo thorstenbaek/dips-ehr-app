@@ -16,7 +16,7 @@ class Workspace extends React.Component {
     {
         return (
             <AppContext.Consumer>
-                {({running}) => {                                   
+                {({running}) => {                                                       
                     console.log(running);
                     return (
 

@@ -9,11 +9,11 @@ const Tile = (props) => {
         classes.push("inactive");
     }    
     
-    var letter = props.tile.label[0];
+    var letter = props.app.label[0];
         return(
             <AppContext.Consumer>
                 {({run}) => (
-                <li onClick={() => run(props.tile)} className={classes.join(' ')} value={props.tile.value}>
+                <li onClick={() => run(props.app)} className={classes.join(' ')} value={props.app.value}>
                     {letter}
                 </li>)}
             </AppContext.Consumer>

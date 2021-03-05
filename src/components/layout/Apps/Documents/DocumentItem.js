@@ -4,7 +4,7 @@ import './DocumentItem.css';
 const DocumentItem = props => {
     
     return (
-        <tr className="document-item" onClick={() => props.openDocument(props.document.id)}>
+        <tr className="document-item" onClick={() => props.openDocument(props.document)}>
             <td>{props.document.description}</td>
             <td>{props.document.date}</td>
         </tr>
