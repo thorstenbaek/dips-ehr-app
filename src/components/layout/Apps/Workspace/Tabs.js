@@ -33,8 +33,7 @@ class Tabs extends React.Component  {
             tabHeader: headers,
             childContent: {...childCnt},            
             active: active
-        })
-        console.log(childCnt);                        
+        })        
     }
 
     componentDidMount() {
@@ -64,9 +63,8 @@ class Tabs extends React.Component  {
             return (
                 <div className="tabs">
                     <ul className="tab-header">
-                        {headers.map((item)=> (
-                            <li onClick={() => this.changeTab(item)}
-                                key={item}
+                        {headers.map((item, index)=> (
+                            <li key={index} onClick={() => this.changeTab(item)}                            
                                 className={item === this.state.active ? "active" : ""}>
                                 {item}
                                 <button onClick={() => this.closeTab(item)}>X</button>
@@ -80,7 +78,7 @@ class Tabs extends React.Component  {
                                 return <div className="tab-child" key={index}>{this.state.childContent[key]}</div>
                             }
                             else {
-                                return null;
+                                return <div className="hidden" key={index}>{this.state.childContent[key]}</div>
                             }
                         })}
                     </div>
