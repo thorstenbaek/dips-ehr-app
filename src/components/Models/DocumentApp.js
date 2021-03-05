@@ -1,3 +1,6 @@
+import React from 'react';
+import IframeResizer from 'iframe-resizer-react';
+
 class DocumentApp {
     constructor(url, label, context, mimetype) {
         this.url = url;        
@@ -15,8 +18,11 @@ class DocumentApp {
         return `${this.label}:${this.resource?.id}`;
     }
 
-    createUrl(fhirServiceUrl, patientId) {
-        return `${this.url}?iss=${fhirServiceUrl}&launch=${patientId}::DocumentReference/${this.resource.id}`;    
+    getComponent(context) {
+        return (<IframeResizer                                                                            
+            src={`${this.url}?iss=${context.service}&launch=${context.patient.id}::DocumentReference/${this.resource.id}`}
+            height="100%"
+            style={{ width: '1px', minWidth: '100%', border: 'none', overflow: 'auto'}} />)
     }
 }
 

@@ -2,6 +2,7 @@ import React from 'react';
 import Tiles from './Tiles/Tiles';
 import Workspace from './Workspace/Workspace';
 import AppContext from '../../Context/AppContext';
+import ComponentApp from '../../Models/ComponentApp';
 import PatientApp from '../../Models/PatientApp';
 import DocumentApp from '../../Models/DocumentApp';
 import Documents from './Documents/Documents';
@@ -25,7 +26,7 @@ class Apps extends React.Component {
         if (smartApps)
         {
           var patientApps = smartApps.filter(app => app.context == "patient").map(app => {
-            return new PatientApp(app.url, null, app.name);        
+            return new PatientApp(app.url, app.name);        
           });
 
           var documentApps = smartApps.filter(app => app.context == "document").map(app => {
@@ -35,8 +36,7 @@ class Apps extends React.Component {
     
         var fhirService = await this.props.configuration.getSetting("FhirServiceUri");
           
-        var documentList = new PatientApp(
-          null, 
+        var documentList = new ComponentApp(      
           (<Documents fhirServiceUrl={fhirService} patient={this.state.selectedPatient} openDocument={this.openDocument}/>), 
           "Documents");
     
@@ -69,6 +69,11 @@ class Apps extends React.Component {
       }
 
     select = name => {
+        if (this.state.active == name)
+        {
+            return;
+        }
+
         this.setState({
             active: name
         });        
